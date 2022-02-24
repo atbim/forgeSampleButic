@@ -1,0 +1,20 @@
+{
+  "name": "forgesample",
+  "version": "1.0.0",
+  "description": "Mi primera Aplicación Web de Forge con el tutorial de Autodesk",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Forge",
+    "Butic"
+  ],
+  "author": "Adrian Used",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "forge-apis": "^0.8.6",
+    "multer": "^1.4.4"
+  }
+}

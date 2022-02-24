@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/start.js",
+            "env": {
+                "FORGE_CLIENT_ID": "6ZZXgwyT1DlY4rX5CuMxRKy9PGA4UHwD",
+                "FORGE_CLIENT_SECRET": "Yefde4c9868b4417",
+                "FORGE_CALLBACK_URL": "http://localhost:3000/api/forge/callback/oauth"
+            }
+        }
+    ]
+}
