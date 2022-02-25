@@ -71,3 +71,30 @@ const pintarSeleccion = () => {
     viewer.clearSelection()
   }
 }
+
+const guadarSeleccion = () => {
+  const seleccion = viewer.getSelection()
+  $.ajax({
+    url: '/api/forge/miprimerapi/seleccion',
+    data: JSON.stringify(seleccion), // seleccion
+    processData: false,
+    contentType: 'application/json',
+    type: 'POST',
+    success: function (res) {
+      console.log(res)
+    },
+  })
+}
+
+const recuperarSeleccion = () => {
+  $.ajax({
+    url: '/api/forge/miprimerapi/seleccion',
+    processData: false,
+    contentType: 'application/json',
+    type: 'GET',
+    success: function (res) {
+      console.log(res.data)
+      viewer.select(res.data)
+    },
+  })
+}
