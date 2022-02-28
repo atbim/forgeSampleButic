@@ -98,3 +98,146 @@ const recuperarSeleccion = () => {
     },
   })
 }
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index
+}
+
+////////// COLORES //////////
+const rojo = new THREE.Vector4(1, 0, 0, 1)
+const verde = new THREE.Vector4(0, 1, 0, 1)
+const azul = new THREE.Vector4(0, 0, 1, 1)
+const blanco = new THREE.Vector4(1, 1, 1, 1)
+const amarillo = new THREE.Vector4(1, 1, 0, 1)
+
+const comprobarPropiedad = (propiedad) => {
+  viewer.clearThemingColors()
+  getAllLeafComponents(viewer, dbIds => {
+    dbIds.forEach(dbId => {
+      viewer.getProperties(dbId, res => {
+        var keynote = res.properties.find(
+          (property) => property.displayName === propiedad
+        )
+        var data = {
+          dbId: dbId,
+          date: Date.now(),
+          checkedBy: 'Adrian',
+          model: 'modelo test',
+          parameter: propiedad
+        }
+        if (keynote === undefined) {
+          // Pintar de amarillo
+          viewer.setThemingColor(dbId, amarillo)
+          data['check'] = 'Sin parametro'
+        } else {
+          if (keynote.displayValue === '') {
+            // Pintar de color rojo
+            viewer.setThemingColor(dbId, rojo)
+            data['check'] = 'Sin rellenar'
+          } else {
+            // Pintar de color verde
+            viewer.setThemingColor(dbId, verde)
+            data['check'] = 'Ok'
+          }
+        }
+        $.ajax({
+          url: '/api/forge/miprimerapi/check',
+          data: JSON.stringify(data),
+          processData: false,
+          contentType: 'application/json',
+          type: 'POST',
+          success: function (res) {
+            console.log(res)
+          },
+        })
+      })
+    })
+  })
+}
+
+const pintarCategorias = () => {
+  getAllLeafComponents(viewer, dbIds => {
+    //var categorias = []
+    dbIds.forEach(dbId => {
+      viewer.getProperties(dbId, res => {
+        var category = res.properties.find(property => property.displayName === 'Category')
+        if (category.displayValue === 'Revit Walls') {
+          // pintar los muros de rojo
+          viewer.setThemingColor(dbId, rojo)
+        } else if (category.displayValue === 'Revit Floors') {
+          // pintar los suelos de verde
+          viewer.setThemingColor(dbId, verde)
+        } else if (category.displayValue === 'Revit Furniture') {
+          // pintar el mobilidario de color azul
+          viewer.setThemingColor(dbId, azul)
+        } else if (category.displayValue === 'Revit Roofs') {
+          // pintar las cubiertas de color blanco
+          viewer.setThemingColor(dbId, blanco)
+        } else {
+          // ocultar los objetos
+          viewer.hide(dbId)
+        }
+        //categorias.push(category.displayValue)
+      })
+    })
+  })
+}
+
+const test = async () => {
+  const propTasks = getAllLeafComponents(viewer, dbIds => {
+    dbIds.map((id) => {
+      return getPropertiesAsync(id)
+    })
+  })
+  Promise.all(propTasks).then((results) => {
+    //populate table with results
+    console.log(results)
+  })
+}
+
+const getPropertiesAsync = (id) => {
+   return new Promise((resolve, reject) => {
+
+     viewer.getProperties(id, (result) => {
+
+        resolve(result)
+
+      }, (error) => {
+
+        reject(error)
+      })
+   })
+}  
+
+const otrafuncion = async () => {
+  var a = Promise.all(pintarCategorias())
+  a.then(data => {
+    console.log(data)
+  })
+}
+
+function getAllLeafComponents(viewer, callback) {
+  var cbCount = 0 // count pending callbacks
+  var components = [] // store the results
+  var tree // the instance tree
+
+  function getLeafComponentsRec(parent) {
+    cbCount++
+    if (tree.getChildCount(parent) != 0) {
+      tree.enumNodeChildren(
+        parent,
+        function (children) {
+          getLeafComponentsRec(children)
+        },
+        false
+      )
+    } else {
+      components.push(parent)
+    }
+    if (--cbCount == 0) callback(components)
+  }
+  viewer.getObjectTree(function (objectTree) {
+    tree = objectTree
+    var allLeafComponents = getLeafComponentsRec(tree.getRootId())
+  })
+}

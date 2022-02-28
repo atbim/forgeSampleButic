@@ -25,6 +25,11 @@ $(document).ready(function () {
     pintarSeleccion()
   })
 
+  $('#checkPropiedadesButton').click(function () {
+    var texto = $('#customSearch').val()
+    comprobarPropiedad(texto)
+  })
+
   $('#createBucketModal').on('shown.bs.modal', function () {
     $('#newBucketKey').focus()
   })

@@ -59,4 +59,17 @@ router.post('/seleccion', (req, res) => {
   })
 })
 
+router.post('/check', (req, res) => {
+    const array = Object.values(req.body)
+    array.push('\n')
+    data = array.join(';')
+    console.log(data)
+    
+    fs.appendFileSync('./checks.csv', data)
+    res.json({
+        status: 'success',
+        message: 'Comprobación guardada correctamente'
+    })
+})
+
 module.exports = router
