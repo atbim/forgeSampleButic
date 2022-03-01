@@ -30,6 +30,11 @@ $(document).ready(function () {
     comprobarPropiedad(texto)
   })
 
+  $('#parametroButton').click(function () {
+    var texto = $('#parametro').val()
+    getPropValues(texto)
+  })
+
   $('#createBucketModal').on('shown.bs.modal', function () {
     $('#newBucketKey').focus()
   })
@@ -115,6 +120,7 @@ function prepareAppBucketTree() {
     .bind('activate_node.jstree', function (evt, data) {
         if (data != null && data.node != null && data.node.type == 'object') {
           $('#forgeViewer').empty()
+          $('#forgeViewer2').empty()
           var urn = data.node.id
           getForgeToken(function (access_token) {
             jQuery.ajax({

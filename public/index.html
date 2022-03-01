@@ -21,6 +21,8 @@
     <script src="js/ForgeTree.js"></script>
     <script src="js/ForgeViewer.js"></script>
     <script src="js/ForgeFunciones.js"></script>
+    <script src="js/LearnAsync.js"></script>
+    <script src="js/ForgePropiedades.js"></script>
 </head>
 
 <body>
@@ -77,10 +79,22 @@
                     <div id="appBuckets">
                         tree here
                     </div>
+                    <div>
+                        <h3>INFORMACIÓN DE PARÁMETROS</h3>
+                        <div>
+                            <input type="text" id="parametro" class="form-control">
+                            <button type="button" class="btn btn-primary" id="parametroButton">Get Values</button>
+                        </div>
+                        <ul id="lista" class="list-group">
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-8 fill">
-                <div id="forgeViewer"></div>
+                <p>VIEWER 3D</p>
+                <div id="forgeViewer" class="forge-viewer"></div>
+                <p>VIEWER 2D</p>
+                <div id="forgeViewer2" class="forge-viewer"></div>
             </div>
         </div>
     </div>

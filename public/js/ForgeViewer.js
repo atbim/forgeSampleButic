@@ -1,4 +1,5 @@
 var viewer
+var viewer2
 
 function launchViewer(urn) {
   var options = {
@@ -11,7 +12,12 @@ function launchViewer(urn) {
       document.getElementById('forgeViewer'),
       { extensions: ['Autodesk.DocumentBrowser'] }
     )
+    viewer2 = new Autodesk.Viewing.GuiViewer3D(
+      document.getElementById('forgeViewer2'),
+      { extensions: ['Autodesk.DocumentBrowser'] }
+    )
     viewer.start()
+    viewer2.start()
     var documentId = 'urn:' + urn
     Autodesk.Viewing.Document.load(
       documentId,
@@ -21,8 +27,24 @@ function launchViewer(urn) {
   })
 }
 
+function onDocumentLoadSuccess2(doc) {
+  var viewables = doc.getRoot().getDefaultGeometry()
+  viewer2.loadDocumentNode(doc, viewables).then((i) => {
+    // documented loaded, any action?
+  })
+}
+
 function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry()
+  const viewables2 = doc.getRoot().getSheetNodes()[0]
+  viewer2.loadDocumentNode(doc, viewables2).then((i) => {
+    // documented loaded, any action?
+    viewer2.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (ev) => {
+      const dbIds = ev.dbIdArray
+      viewer.isolate(dbIds)
+      viewer.fitToView(dbIds)
+    })
+  })
   viewer.loadDocumentNode(doc, viewables).then((i) => {
     // documented loaded, any action?
     viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (ev) => {

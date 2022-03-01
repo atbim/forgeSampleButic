@@ -15,11 +15,13 @@ html, body {
   #appBuckets {
     overflow: auto;
     width: 100%;
-    height: calc(100vh - 150px);
+    /* height: calc(100vh - 150px); */
   }
 
-  #forgeViewer {
-    width: 100%;
+  .forge-viewer {
+    position: relative;
+    width: 100%; 
+    height: calc((100vh - 140px) / 2);
   }
 
   /* The switch - the box around the slider */
