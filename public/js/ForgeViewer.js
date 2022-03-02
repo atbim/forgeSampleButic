@@ -27,13 +27,6 @@ function launchViewer(urn) {
   })
 }
 
-function onDocumentLoadSuccess2(doc) {
-  var viewables = doc.getRoot().getDefaultGeometry()
-  viewer2.loadDocumentNode(doc, viewables).then((i) => {
-    // documented loaded, any action?
-  })
-}
-
 function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry()
   const viewables2 = doc.getRoot().getSheetNodes()[0]
@@ -49,6 +42,7 @@ function onDocumentLoadSuccess(doc) {
     // documented loaded, any action?
     viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (ev) => {
       var dbIds = ev.dbIdArray
+      viewer2.isolate(dbIds)
       $('#nObjectos').text(`${dbIds.length} Objectos seleccionados`)
       datosSeleccion(dbIds)
     })

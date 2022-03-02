@@ -16,6 +16,16 @@ const getPropertiesAsync = (dbId) => {
     })
 }
 
+const getAllItemAsync = () => {
+    new Promise((resolve, reject) => {
+        viewer.model.getBulkProperties([], ['Category'], res => {
+            resolve(res)
+        }, err => {
+            reject(err)
+        })
+    })
+}
+
 const getPropValues = async (displayName) => {
     const dbIds = await getInstancesAsync()
     const array = []
@@ -27,6 +37,7 @@ const getPropValues = async (displayName) => {
             array.push(propiedad.displayValue)
         }
     }
+    
     
     const uniques = array.filter(onlyUnique)
     // Rellenar la lista en la UI

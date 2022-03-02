@@ -122,6 +122,7 @@ function prepareAppBucketTree() {
           $('#forgeViewer').empty()
           $('#forgeViewer2').empty()
           var urn = data.node.id
+          
           getForgeToken(function (access_token) {
             jQuery.ajax({
               url:
