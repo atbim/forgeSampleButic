@@ -2,6 +2,21 @@ var _idIncidencia
 
 $(document).ready(function () {
   $('#actualizarIncidenciaButton').hide()
+
+  $('#cancelarIncidenciaButton').click(() => {
+    _idIncidencia = ''
+    const form = $('.f')[0]
+    const formType = form.getAttribute('id')
+    console.log(formType)
+    if (formType === 'crearIncidencia') {
+      resetForm('crearIncidencia')
+    } else {
+      resetForm('actualizarIncidencia')
+      $('#guardarIncidenciaButton').show()
+      $('#actualizarIncidenciaButton').hide()
+      $('#actualizarIncidencia').attr('id', 'crearIncidencia')
+    }
+  })
   // Me suscribo al evento click a los objetos de dentro del ID listaIncidencias que tengan la clase .incidencia
   $('#listaIncidencias').on('click', '.incidencia', (e) => {
     const id = e.target.getAttribute('id')
@@ -81,6 +96,7 @@ $(document).ready(function () {
           contentType: 'application/json',
           type: 'POST',
           success: function (res) {
+            resetForm('crearIncidencia')
             getOpenIncidencias()
           },
           error: function (err) {
@@ -112,8 +128,11 @@ $(document).ready(function () {
           contentType: 'application/json',
           type: 'PATCH',
           success: async function (res) {
+            _idIncidencia = ''
             $('#guardarIncidenciaButton').show()
             $('#actualizarIncidenciaButton').hide()
+            resetForm('actualizarIncidencia')
+            $('#actualizarIncidencia').attr('id', 'crearIncidencia')
             getOpenIncidencias()
           },
           error: function (err) {
@@ -150,4 +169,8 @@ const getOpenIncidencias = async () => {
       `<li id="${incidencia._id}" class="list-group-item incidencia">${incidencia.title}</li>`
     )
   })
+}
+
+const resetForm = (id) => {
+  $(`#${id}`).trigger('reset')
 }
