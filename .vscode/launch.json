@@ -12,7 +12,8 @@
             "env": {
                 "FORGE_CLIENT_ID": "6ZZXgwyT1DlY4rX5CuMxRKy9PGA4UHwD",
                 "FORGE_CLIENT_SECRET": "Yefde4c9868b4417",
-                "FORGE_CALLBACK_URL": "http://localhost:3000/api/forge/callback/oauth"
+                "FORGE_CALLBACK_URL": "http://localhost:3000/api/forge/callback/oauth",
+                "MONGO_URI" : "mongodb+srv://forgebutic:X23jQE1WzzSVBCWt@cluster0.tceeh.mongodb.net/forge-butic?retryWrites=true&w=majority"
             }
         }
     ]
