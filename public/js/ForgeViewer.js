@@ -45,6 +45,11 @@ function onDocumentLoadSuccess(doc) {
       viewer2.isolate(dbIds)
       $('#nObjectos').text(`${dbIds.length} Objectos seleccionados`)
       datosSeleccion(dbIds)
+
+      // Mostrar información de extradata
+      if (dbIds.length === 1) {
+        getExtradaData(dbIds[0])
+      }
     })
     viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (ev) => {
       getOpenIncidencias()

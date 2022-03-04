@@ -174,3 +174,23 @@ const getOpenIncidencias = async () => {
 const resetForm = (id) => {
   $(`#${id}`).trigger('reset')
 }
+
+const getExtradaData = async (dbId) => {
+  const res = await getPropertiesAsync(dbId)
+  const keynoteParameter = res.properties.find(x => x.displayName === 'Keynote')
+  if (keynoteParameter !== undefined) {
+    const keynote = keynoteParameter.displayValue
+    $.ajax({
+      url: '/api/forge/extradata/' + keynote,
+      processData: false,
+      contentType: 'application/json',
+      type: 'GET',
+      success: function (res) {
+        console.log(res.data.info)
+      },
+      error: function (err) {
+        console.error(err)
+      },
+    })
+  }
+}
