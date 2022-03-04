@@ -19,6 +19,7 @@ const IncidenciasSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    //unique: true, esto sirve para que este campo sea único
   },
     dbIds: [{
       type: Number

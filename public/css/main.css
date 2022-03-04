@@ -12,6 +12,12 @@ html, body {
     margin-right: 30px;
   }
 
+  .incidencia {
+    text-align: right;
+    color: red;
+    font-style: italic;
+  }
+
   #appBuckets {
     overflow: auto;
     width: 100%;

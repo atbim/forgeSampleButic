@@ -46,14 +46,8 @@ function onDocumentLoadSuccess(doc) {
       $('#nObjectos').text(`${dbIds.length} Objectos seleccionados`)
       datosSeleccion(dbIds)
     })
-    viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, async (ev) => {
-      const incidencias = await getOpenIncidencias('Open')
-      $('#listaIncidencias').empty()
-      incidencias.data.forEach((incidencia) => {
-        $('#listaIncidencias').append(
-          `<li class="list-group-item incidencia">${incidencia.title}</li>`
-        )
-      })
+    viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (ev) => {
+      getOpenIncidencias()
     })
   })
 }
