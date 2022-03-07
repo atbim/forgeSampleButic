@@ -21,9 +21,9 @@ $(document).ready(function () {
     sumarCosas('Area')
   })
 
-  $('#pintarButton').click(function () {
+  /* $('#pintarButton').click(function () {
     pintarSeleccion()
-  })
+  }) */
 
   $('#checkPropiedadesButton').click(function () {
     var texto = $('#customSearch').val()

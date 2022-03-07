@@ -4,7 +4,7 @@
   "description": "Mi primera Aplicación Web de Forge con el tutorial de Autodesk",
   "main": "start.js",
   "scripts": {
-    "start": "node start"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "Forge",

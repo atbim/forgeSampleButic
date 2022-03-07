@@ -10,7 +10,13 @@ function launchViewer(urn) {
   Autodesk.Viewing.Initializer(options, () => {
     viewer = new Autodesk.Viewing.GuiViewer3D(
       document.getElementById('forgeViewer'),
-      { extensions: ['Autodesk.DocumentBrowser', 'MyAwesomeExtension'] }
+      {
+        extensions: [
+          'Autodesk.DocumentBrowser',
+          'MyAwesomeExtension',
+          'ExtraDataExtension',
+        ],
+      }
     )
     viewer2 = new Autodesk.Viewing.GuiViewer3D(
       document.getElementById('forgeViewer2'),
@@ -48,7 +54,7 @@ function onDocumentLoadSuccess(doc) {
 
       // Mostrar información de extradata
       if (dbIds.length === 1) {
-        getExtradaData(dbIds[0])
+        //getExtradaData(dbIds[0])
       }
     })
     viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (ev) => {

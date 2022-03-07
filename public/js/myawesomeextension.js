@@ -46,7 +46,7 @@ class MyAwesomeExtension extends Autodesk.Viewing.Extension {
     this._button2 = new Autodesk.Viewing.UI.Button('miPrimerBoton')
     this._button2.onClick = (ev) => {
       // Execute an action here
-      viewer.isolate(viewer.getSelection())
+      pintarSeleccion()
     }
     this._button2.setToolTip('Mi primer botón')
     this._button2.addClass('myAwesomeExtensionIcon')
