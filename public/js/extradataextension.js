@@ -122,6 +122,10 @@ class ExtraDataExtension extends Autodesk.Viewing.Extension {
           'miDockingPanel',
           'Mi Primer Docking Panel'
         )
+        // Colocar aquí eventos para las funcionalidades del panel
+        $('#pintarButton').click(() => {
+          pintarSeleccion()
+        })
       }
       // Show/hide docking panel
       this._panelDp.setVisible(!this._panelDp.isVisible())
@@ -164,8 +168,9 @@ class MiPrimerDockingPanel extends Autodesk.Viewing.UI.DockingPanel {
     this.createTitleBar(title)
 
     var div = document.createElement('div')
-    div.setAttribute('id', 'testPaneladsfsaf')
-    div.innerHTML = `Hola Mundo!!!`
+    div.innerHTML = `<h4>COLOCAR AQUÍ MI CONTENIDO HTML</H4>
+                      <button type="button" class="btn btn-primary" id="pintarButton">Pintar</button>
+                    `
     this.container.appendChild(div)
   }
 }
