@@ -32,7 +32,20 @@ html, body {
     background-position: center;
 }
 
+#dashboard{
+    overflow: auto;
+    height: calc(100vh - 100px);
+}
 
+.transition-width {
+    transition: width 1s ease-in-out;
+}
+
+.dashboardPanel {
+    width: 100%;
+    padding: 3%;
+    display: block;
+}
 
   #appBuckets {
     overflow: auto;
