@@ -12,25 +12,29 @@ const dibujarGrafico = async () => {
   const rojo = new THREE.Vector4(1, 0, 0, 1)
   const ctx = document.getElementById('myChart').getContext('2d')
   const ejemplares = await getInstancesAsync()
-  const res = await _getBulkPropertiesAsync(viewer, ejemplares, ['Type Name', 'Area'])
+  const res = await _getBulkPropertiesAsync(viewer, ejemplares, ['Type Name', 'Area', 'Volume'])
   var _data = {
   }
   res.forEach(item => {
-    // Checkear que tienen las 2 propiedades, tanto Type Name como Area
-    if (item.properties.length === 2) {
+    // Checkear que tienen las 3 propiedades, tanto Type Name como Area
+    if (item.properties.length === 3) {
       const typeName = item.properties.find(x => x.displayName === 'Type Name')
       const area = item.properties.find(x => x.displayName === 'Area')
+      const volume = item.properties.find((x) => x.displayName === 'Volume')
       if (typeName.displayValue !== '') {
         if (_data[typeName.displayValue] === undefined)
-          _data[typeName.displayValue] = { area: 0, dbIds: [] }
+          _data[typeName.displayValue] = { area: 0, volume: 0, dbIds: [] }
         _data[typeName.displayValue].area += area.displayValue
+        _data[typeName.displayValue].volume += volume.displayValue
         _data[typeName.displayValue].dbIds.push(item.dbId)
       }
     }
   })
+  console.log(_data)
 
   var labels = Object.keys(_data)
-  var data = labels.map((key) => _data[key].area.toFixed(2))
+  var dataArea = labels.map((key) => _data[key].area.toFixed(2))
+  var dataVolume = labels.map((key) => _data[key].volume.toFixed(2))
   var colors = _generateColors(labels.length)
 
   const myChart = new Chart(ctx, {
@@ -40,7 +44,14 @@ const dibujarGrafico = async () => {
       datasets: [
         {
           label: 'Area',
-          data,
+          data: dataArea,
+          backgroundColor: colors.background,
+          borderColor: colors.borders,
+          borderWidth: 1,
+        },
+        {
+          label: 'Volume',
+          data: dataVolume,
           backgroundColor: colors.background,
           borderColor: colors.borders,
           borderWidth: 1,
@@ -55,8 +66,13 @@ const dibujarGrafico = async () => {
             .split('(')[1]
             .split(')')[0]
             .split(',')
-            .map(x => parseFloat(x))
-          const color = new THREE.Vector4(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255, rgb[3])
+            .map((x) => parseFloat(x))
+          const color = new THREE.Vector4(
+            rgb[0] / 255,
+            rgb[1] / 255,
+            rgb[2] / 255,
+            rgb[3]
+          )
           const label = item[0]._model.label
           const dbIds = _data[label].dbIds
           viewer.isolate(dbIds)

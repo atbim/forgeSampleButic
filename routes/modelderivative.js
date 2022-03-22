@@ -42,4 +42,17 @@ router.post('/jobs', async (req, res, next) => {
   }
 })
 
+// GET /api/forge/modelderivative/properties/:urn - get all properties from URN.
+router.get('/properties/:urn', async (req, res, next) => {
+  try {
+    const urn = req.params.urn
+    const metadata = await new DerivativesApi().getMetadata(urn, {}, req.oauth_client, req.oauth_token)
+    const guid = metadata.body.data.metadata[0].guid // Cojo la primera vista, se podría elegir de cual quiero las propiedades
+    const properties = await new DerivativesApi().getModelviewProperties(urn, guid, { forceget: true }, req.oauth_client, req.oauth_token)
+    res.status(200).json(properties.body.data.collection)
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router
