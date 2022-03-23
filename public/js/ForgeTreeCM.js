@@ -119,6 +119,33 @@ function prepareAppBucketTree() {
     })
     .bind('activate_node.jstree', function (evt, data) {
       if (data != null && data.node != null && data.node.type == 'object') {
+        const urn = data.node.id
+        $('#cuadroMandos').empty()
+        $.ajax({
+          url: '/api/forge/modelderivative/properties/' + urn + '/all',
+          processData: false,
+          contentType: 'application/json',
+          type: 'GET',
+          success: function (res) {
+            console.log(res)
+            const views = Object.keys(res)
+            for (var i = 0; i < views.length; i++) {
+              const id = `myChart${i}`
+              $('#cuadroMandos').append(
+                `<div class="col-sm-4"><canvas id="${id}" width="400" height="400"></canvas></div>`
+              )
+              dibujarGraficoVista(
+                id,
+                res[views[i]].data,
+                views[i],
+                res[views[i]].role
+              )
+            }
+          },
+          error: function (err) {
+            console.error(err)
+          },
+        })
       }
       if (data != null && data.node != null && data.node.type == 'bucket') {
         const urns = data.node.children
@@ -134,7 +161,7 @@ function prepareAppBucketTree() {
             type: 'GET',
             success: function (res) {
               $('#cuadroMandos').append(
-                `<canvas id="${id}" width="400" height="400"></canvas>`
+                `<div class="col-sm-4"><canvas id="${id}" width="400" height="400"></canvas></div>`
               )
               dibujarGraficoCm(id, res, extension)
             },
@@ -145,6 +172,170 @@ function prepareAppBucketTree() {
         }
       }
     })
+}
+
+const tranformarUnidadesSistemaMetrico = (unidad, cantidad) => {
+  switch (unidad) {
+    case 'mm':
+      return cantidad * 0.001
+    case 'ft':
+      return cantidad * 0.3048
+    case 'ft^3':
+      return cantidad * 0.3048 * 0.3048 * 0.3048
+    case 'ft^2':
+      return cantidad * 0.3048 * 0.3048
+    default:
+      return cantidad
+  }
+}
+
+const dibujarGraficoVista = (chartId, items, view, role) => {
+  // Recorremos los items para montar nuestro objeto que va a ir al gráfico
+  var _data = {}
+  if (role === '3d') {
+    items.forEach((item) => {
+      let identityData = item.properties['Datos de identidad']
+      if (identityData !== undefined) {
+        const typeName = identityData['Nombre de tipo']
+        if (typeName !== undefined) {
+          // Rellenamos el objeto _data
+          if (_data[typeName] === undefined)
+            _data[typeName] = { area: 0, dbIds: [] }
+          const cotas = item.properties['Cotas']
+          if (cotas != undefined) {
+            const area = cotas['Área']
+            if (area !== undefined) {
+              const _origen = area.split(' ')
+              const areaOriginal = parseFloat(_origen[0])
+              const unidad = _origen[1]
+              _data[typeName].area += tranformarUnidadesSistemaMetrico(
+                unidad,
+                areaOriginal
+              )
+            }
+          }
+          _data[typeName].dbIds.push(item.objectid)
+        }
+      }
+    })
+    var labels = Object.keys(_data)
+    var data = Object.keys(_data).map((key) => _data[key].area.toFixed(2))
+    var colors = _generateColors(labels.length)
+
+    const ctx = document.getElementById(chartId).getContext('2d')
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: view,
+            data,
+            backgroundColor: colors.background,
+            borderColor: colors.borders,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+              },
+            },
+          ],
+          y: {
+            beginAtZero: true,
+            min: 0,
+          },
+        },
+      },
+    })
+  } else {
+    items.forEach((item) => {
+      let identityData = item.properties['Datos de identidad']
+      if (identityData !== undefined) {
+        const category = identityData['Categoria']
+        if (category !== undefined && category === 'Habitaciones') {
+          const roomName = item.name
+          if (_data[roomName] === undefined)
+            _data[roomName] = { area: 0, altura: 0, dbIds: [] }
+          const area = item.properties['Cotas']['Área']
+          const _origen = area.split(' ')
+          const areaOriginal = parseFloat(_origen[0])
+          const unidad = _origen[1]
+          _data[roomName].area += tranformarUnidadesSistemaMetrico(
+            unidad,
+            areaOriginal
+          )
+          const altura = item.properties['Cotas']['Altura sin límites']
+          const _origen2 = altura.split(' ')
+          const alturaOriginal = parseFloat(_origen2[0])
+          const unidad2 = _origen2[1]
+          _data[roomName].altura += tranformarUnidadesSistemaMetrico(
+            unidad2,
+            alturaOriginal
+          )
+          _data[roomName].dbIds.push(item.objectid)
+        }
+      }
+    })
+    var labels = Object.keys(_data)
+    var dataArea = Object.keys(_data).map((key) => _data[key].area.toFixed(2))
+    var dataAltura = Object.keys(_data).map((key) => _data[key].altura.toFixed(2))
+
+    const ctx = document.getElementById(chartId).getContext('2d')
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Área',
+            yAxisID: 'Area',
+            data: dataArea,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+          },
+          {
+            label: 'Altura',
+            yAxisID: 'Altura',
+            data: dataAltura,
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          yAxes: [
+            {
+              id: 'Area',
+              position: 'left',
+              ticks: {
+                min: 0,
+              },
+            },
+            {
+              id: 'Altura',
+              position: 'right',
+              ticks: {
+                min: 0,
+              },
+            },
+          ],
+          y: {
+            beginAtZero: true,
+            min: 0,
+          },
+        },
+      },
+    })
+  }
 }
 
 const dibujarGraficoCm = (chartId, res, extension) => {

@@ -26,6 +26,7 @@ app.use('/api/forge/modelderivative', require('./routes/modelderivative'))
 app.use('/api/forge/miprimerapi', require('./routes/miprimerapi'))
 app.use('/api/forge/incidencias', require('./routes/incidencias'))
 app.use('/api/forge/extradata', require('./routes/extradata'))
+app.use('/api/forge/hooks', require('./routes/hooks'))
 app.use((err, req, res, next) => {
   console.error(err)
   res.status(err.statusCode).json(err)

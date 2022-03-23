@@ -47,13 +47,6 @@ html, body {
     display: block;
 }
 
-canvas{
-
-  width:300px !important;
-  height:300px !important;
-
-}
-
   #appBuckets {
     overflow: auto;
     width: 100%;
