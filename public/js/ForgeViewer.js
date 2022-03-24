@@ -32,17 +32,28 @@ function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry()
   viewer.loadDocumentNode(doc, viewables).then((i) => {
     // documented loaded, any action?
-    viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (ev) => {
-      
-
-      // Mostrar información de extradata
-      if (dbIds.length === 1) {
-        //getExtradaData(dbIds[0])
+    viewer.addEventListener(
+      Autodesk.Viewing.SELECTION_CHANGED_EVENT,
+      (ev) => {}
+    )
+    viewer.addEventListener(
+      Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+      async (ev) => {
+        getOpenIncidencias()
+        const _data = await getCheckGeneral()
+        const checks = Object.keys(_data.wrong)
+        const rojo = new THREE.Vector4(1, 0, 0, 1)
+        const wrong = []
+        checks.forEach((check) => {
+          const dbIds = _data.wrong[check]
+          dbIds.forEach(dbId => {
+            viewer.setThemingColor(dbId, rojo)
+            if (!wrong.includes(dbId)) wrong.push(dbId)
+          })
+        })
+        console.log(wrong)
       }
-    })
-    viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (ev) => {
-      getOpenIncidencias()
-    })
+    )
   })
 }
 
