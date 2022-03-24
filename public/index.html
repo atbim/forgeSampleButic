@@ -21,7 +21,8 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
     <!-- this project files -->
     <link href="css/main.css" rel="stylesheet" />
-    <script src="js/ForgeTreeCM.js"></script>
+    <script src="js/ForgeTree.js"></script>
+    <script src="js/ForgeViewer.js"></script>
     <script src="js/ForgeFunciones.js"></script>
     <script src="js/LearnAsync.js"></script>
     <script src="js/ForgePropiedades.js"></script>
@@ -33,6 +34,7 @@
     <script src="js/dashboard/PanelBarChart.js"></script>
     <script src="js/dashboard/PanelPieChart.js"></script>
     <script src="js/miPrimerGrafico.js"></script>
+    <script src="js/mischeckeos.js"></script>
 </head>
 
 <body>
@@ -88,11 +90,66 @@
                     <div id="appBuckets">
                         tree here
                     </div>
+                    <div>
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>
+                    <!-- <div>
+                        <h3>INFORMACIÓN DE PARÁMETROS</h3>
+                        <div>
+                            <input type="text" id="parametro" class="form-control">
+                            <button type="button" class="btn btn-primary" id="parametroButton">Get Values</button>
+                        </div>
+                        <ul id="lista" class="list-group">
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>CREAR INCIDENCIAS</h3>
+                        <form id="crearIncidencia" class="f">
+                            <div class="form-group">
+                                <label for="user">Usuario:</label>
+                                <input class="form-control" type="text" id="user" name="user">
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Título:</label>
+                                <input class="form-control" type="text" id="title" name="title">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Estado:</label>
+                                <input class="form-control" type="text" id="status" name="status" value="Open">
+                            </div>      
+                            <div class="form-group">
+                                <label for="assignedTo">Responsable:</label>
+                                <input class="form-control" type="text" id="assignedTo" name="assignedTo">
+                            </div>
+                            <div class="form-group">
+                                <label for="closedAt">Fecha Límite:</label>
+                                <input class="form-control" type="date" id="closedAt" name="closedAt">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Descripcion:</label>
+                                <input class="form-control" type="textarea" id="description" name="description">
+                            </div>
+                            <input id="guardarIncidenciaButton" class="btn btn-success" type="submit" value="Guardar Incidencia">
+                            <input id="actualizarIncidenciaButton" class="btn btn-primary" type="submit" value="Actualizar Incidencia">
+                            <input id="cancelarIncidenciaButton" class="btn btn-secondary" value="Cancel">
+                        </form>
+                    </div> -->
                 </div>
             </div>
             <div class="col-sm-8 fill">
-                <div class="row fill" id="cuadroMandos"></div>
+                <p>VIEWER 3D</p>
+                <div id="forgeViewer" class="forge-viewer"></div>
             </div>
+            <!-- <div class="col-sm-2 fill">
+                <div class="panel panel-default fill">
+                    <div class="panel-heading" data-toggle="tooltip">
+                        INCIDENCIAS ABIERTAS
+                    </div>
+                    <div>
+                        <ul id="listaIncidencias" class="incidencia" class="list-group">
+                    </div>
+                </div>
+            </div> -->
         </div>
     </div>
     <form id="uploadFile" method='post' enctype="multipart/form-data">

@@ -18,12 +18,7 @@ function launchViewer(urn) {
         ],
       }
     )
-    viewer2 = new Autodesk.Viewing.GuiViewer3D(
-      document.getElementById('forgeViewer2'),
-      { extensions: ['Autodesk.DocumentBrowser'] }
-    )
     viewer.start()
-    viewer2.start()
     var documentId = 'urn:' + urn
     Autodesk.Viewing.Document.load(
       documentId,
@@ -35,27 +30,10 @@ function launchViewer(urn) {
 
 function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry()
-  const viewables2 = doc.getRoot().getSheetNodes()[0]
-  if (viewables2 !== undefined) {
-    viewer2.loadDocumentNode(doc, viewables2).then((i) => {
-      // documented loaded, any action?
-      viewer2.addEventListener(
-        Autodesk.Viewing.SELECTION_CHANGED_EVENT,
-        (ev) => {
-          const dbIds = ev.dbIdArray
-          viewer.isolate(dbIds)
-          viewer.fitToView(dbIds)
-        }
-      )
-    })
-  }
   viewer.loadDocumentNode(doc, viewables).then((i) => {
     // documented loaded, any action?
     viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (ev) => {
-      var dbIds = ev.dbIdArray
-      viewer2.isolate(dbIds)
-      $('#nObjectos').text(`${dbIds.length} Objectos seleccionados`)
-      datosSeleccion(dbIds)
+      
 
       // Mostrar información de extradata
       if (dbIds.length === 1) {
